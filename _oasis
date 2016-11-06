@@ -1,0 +1,85 @@
+OASISFormat: 0.4
+Name: stream_s
+Version: 0.1
+Synopsis: Stream Fusion, Staged
+Authors:
+   Oleg Kiselyov,
+   Aggelos Biboudis,
+   Nick Palladinos,
+   Yannis Smaragdakis
+BuildTools: ocamlbuild
+License: MIT
+Plugins:
+   META (0.4),
+   DevFiles (0.4)
+BuildDepends:
+   oUnit (>= 2.0),
+   batteries (= 2.3),
+   oml
+
+# +-------------------------------------------------------------------+
+# | Flags                                                             |
+# +-------------------------------------------------------------------+
+
+Flag all
+  Description:      Build and install everything
+  Default:          false
+
+Flag benchmarks
+  Description:	     Build and run benchmarks
+  Default:          false
+
+# +-------------------------------------------------------------------+
+# | Libraries                                                         |
+# +-------------------------------------------------------------------+
+
+Library stream_s
+  Findlibname:      stream_s
+  Path:             lib
+  BuildTools:       ocamlbuild
+  InternalModules:  Stream_constructors, Stream_combinators
+  Modules:          Stream_s
+
+# +-------------------------------------------------------------------+
+# | Tests                                                             |
+# +-------------------------------------------------------------------+
+
+Executable run_benchmarks
+  Path:             benchmarks
+  MainIs:           benchmark_stream.ml
+  Build$:           flag(benchmarks)
+  Install:          false
+  BuildDepends:     oml, stream_s
+
+Executable run_batteries_benchmarks
+  Path:             benchmarks
+  MainIs:           benchmark_batteries.ml
+  Build$:           flag(benchmarks)
+  Install:          false
+  BuildDepends:     batteries
+
+Executable test_stream
+  Path:             test
+  MainIs:           test_stream.ml
+  Build$:           flag(tests)
+  Install:          false
+  BuildDepends:     stream_s, oUnit
+
+Test stream
+  Command: $test_stream
+  TestTools: test_stream
+  Run$: flag(tests)
+
+# Test benchmark_streams
+#  Command: $run_benchmarks
+#  TestTools: run_benchmarks
+#  Run$: flag(benchmarks)
+
+# Test benchmark_batteries
+#  Command: $run_batteries_benchmarks
+#  TestTools: run_batteries_benchmarks
+#  Run$: flag(benchmarks)
+
+# +-------------------------------------------------------------------+
+# | Misc                                                              |
+# +-------------------------------------------------------------------+
