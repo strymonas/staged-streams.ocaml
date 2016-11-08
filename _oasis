@@ -34,7 +34,7 @@ Flag benchmarks
 # +-------------------------------------------------------------------+
 
 Library stream_s
-  Findlibname:      stream_s
+  Findlibname:      staged-streams
   Path:             lib
   BuildTools:       ocamlbuild
   InternalModules:  Stream_constructors, Stream_combinators
@@ -49,7 +49,7 @@ Executable run_benchmarks
   MainIs:           benchmark_stream.ml
   Build$:           flag(benchmarks)
   Install:          false
-  BuildDepends:     oml, stream_s
+  BuildDepends:     oml, staged-streams
 
 Executable run_batteries_benchmarks
   Path:             benchmarks
@@ -63,7 +63,7 @@ Executable test_stream
   MainIs:           test_stream.ml
   Build$:           flag(tests)
   Install:          false
-  BuildDepends:     stream_s, oUnit
+  BuildDepends:     staged-streams, oUnit
 
 Test stream
   Command: $test_stream

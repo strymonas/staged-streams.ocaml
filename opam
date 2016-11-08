@@ -1,0 +1,27 @@
+opam-version: "1.2"
+name: "staged-streams"
+version: "dev"
+authors: [
+  "Oleg Kiselyov"
+  "Aggelos Biboudis"
+  "Nick Palladinos"
+  "Yannis Smaragdakis"
+]
+maintainer: "oleg@okmij.org"
+homepage: "https://strymonas.github.io/"
+dev-repo: "https://github.com/strymonas/staged-streams.ocaml.git"
+bug-reports: "https://github.com/strymonas/staged-streams.ocaml/issues"
+build: [
+  ["./configure" "--prefix" "%{prefix}%"]
+  [make "all"]
+]
+install:[make "install"]
+remove: ["ocamlfind" "remove" "staged-streams"]
+depends: [
+   "batteries" {= "2.3.0"}
+   "oml"
+   "ocamlfind" {build}
+   "oasis" {build}
+]
+available: [ (compiler = "4.02.1+BER")
+           | (compiler = "4.02.1+modular-implicits-ber") ]
