@@ -72,7 +72,7 @@ let write_code : string -> 'a code -> unit = fun file_name c ->
 
 let run_natively : ?compiler:string -> 'a code -> unit =
    fun ?(compiler:string="ocamlfind ocamlopt -package oml -package batteries -linkpkg") c ->
-      let fname = Filename.get_temp_dir_name() ^ "gen.ml" in write_code fname c;
+      let fname = Filename.concat (Filename.get_temp_dir_name()) "gen.ml" in write_code fname c;
       (* let start_time = Sys.time () in *)
       let retc = Sys.command (compiler ^ " " ^ fname) in
       (* let end_time = Sys.time () in *)
