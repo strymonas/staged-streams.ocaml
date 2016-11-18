@@ -5,7 +5,11 @@ script: bash -ex .travis-opam.sh
 
 env:
   - OCAML_VERSION=4.02.1
-  - OPAM_SWITCH=4.02.1+BER
+
+after_script: 
+  - opam switch 4.01.0+BER 
+  - eval $(opam config env)
+  
 os:
   - linux
   - osx
