@@ -12,7 +12,7 @@ homepage: "https://strymonas.github.io/"
 dev-repo: "https://github.com/strymonas/staged-streams.ocaml.git"
 bug-reports: "https://github.com/strymonas/staged-streams.ocaml/issues"
 build: [
-  ["./configure" "--prefix" "%{prefix}%"]
+  ["./configure" "--enable-tests" "--prefix" "%{prefix}%"]
   [make "all"]
 ]
 install:[make "install"]
