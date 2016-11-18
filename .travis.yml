@@ -4,7 +4,7 @@ install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.t
 script: bash -ex .travis-opam.sh
 
 env:
-  - OCAML_VERSION=4.02.1
+  - OCAML_VERSION=4.02
 
 after_script: 
   - opam switch 4.01.0+BER 
@@ -12,4 +12,3 @@ after_script:
   
 os:
   - linux
-  - osx
