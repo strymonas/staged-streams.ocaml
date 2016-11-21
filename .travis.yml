@@ -7,7 +7,7 @@ install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.t
 script: bash -ex .travis-opam.sh
 
 env:
-  - OCAML_VERSION=4.02.1 FORK_USER=biboudis
+  - OCAML_VERSION=4.02 OCAML_EXTENSION=+BER FORK_USER=biboudis
 
 os:
   - linux
