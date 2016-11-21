@@ -19,9 +19,10 @@ install:[make "install"]
 remove: ["ocamlfind" "remove" "staged-streams"]
 depends: [
    "batteries" {= "2.3.0"}
-   "oml"
+   "oml" {= "0.0.5"}
    "ocamlfind" {build}
    "oasis" {build}
+   "oUnit" {= "2.0.0"}
 ]
 available: [ (compiler = "4.02.1+BER")
            | (compiler = "4.02.1+modular-implicits-ber") ]
