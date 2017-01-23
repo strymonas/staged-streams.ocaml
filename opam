@@ -23,5 +23,5 @@ depends: [
    "ocamlfind" {build}
    "oasis" {build}
    "ounit" {build}
+   "base-metaocaml-ocamlfind"
 ]
-available: [ (compiler = "4.02.1+BER") ]
