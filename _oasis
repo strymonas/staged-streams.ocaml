@@ -12,10 +12,6 @@ License: MIT
 Plugins:
    META (0.4),
    DevFiles (0.4)
-BuildDepends:
-   oUnit (>= 2.0),
-   batteries (= 2.3),
-   oml
 
 # +-------------------------------------------------------------------+
 # | Flags                                                             |
@@ -56,7 +52,7 @@ Executable run_batteries_benchmarks
   MainIs:           benchmark_batteries.ml
   Build$:           flag(benchmarks)
   Install:          false
-  BuildDepends:     batteries
+  BuildDepends:     batteries (= 2.3)
 
 Executable test_stream
   Path:             test
