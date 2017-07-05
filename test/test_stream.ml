@@ -383,6 +383,13 @@ let test11 =
    of_arr .<[|0;3;2;5;1|]>.
    |> minmax (.<100>.,.<-1>.);;
 
+let testzff =
+  zip_with (fun e1 e2 -> .<.~e1 * .~e2>.)
+	   (of_arr .<[|1;2;3;4;5|]>. |> filter (fun x -> .<.~x > 2>.))
+	   (of_arr .<[|1;2;3;4;5|]>. |> filter (fun x -> .<.~x < 3>.))
+  |> fold (fun z a -> .<.~z + .~a>.) .<0>.;;
+
+
 (* let (0,5) = Runcode.run test11;; *)
 
 let suite = "suite" >:::
@@ -406,6 +413,7 @@ let suite = "suite" >:::
  "zip_multiple1"                          >:: (fun ctx -> assert_equal (Runcode.run testz6)  10);
  "zip_multiple2"                          >:: (fun ctx -> assert_equal (Runcode.run testz7)  10);
  "zip_deeply_nested_xx"                   >:: (fun ctx -> assert_equal (Runcode.run testxx)  [4; 4; 4; 2; 2; 2; 2; 0]);
+ "zip_filter_filter"                      >:: (fun ctx -> assert_equal (Runcode.run testzff) 11); 
  "zip_deeply_nested_yy"                   >:: (fun ctx -> assert_equal (Runcode.run testyy)  [5; 4; 3; 2; 3; 2]);
  "zip_deeply_nested_final"                >:: (fun ctx -> assert_equal (Runcode.run testz8) [(4, 5); (2, 4); (2, 3); (2, 2); (2, 3); (0, 2)]);
  "zip_paper"                              >:: (fun ctx -> assert_equal (Runcode.run testc)   [(16, 4); (0, 2)]);
