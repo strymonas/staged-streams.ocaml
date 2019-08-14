@@ -109,7 +109,8 @@ let unfold : ('z code -> ('a * 'z) option code) -> 'z code -> 'a stream
           card = Many;
           step = (fun (s) body ->
 	   .<match ! (.~s) with
-              Some (el,s') -> .~s := .~(p .<s'>.); .~(body .<el>.)>.)})
+            | None -> assert false
+            | Some (el,s') -> .~s := .~(p .<s'>.); .~(body .<el>.)>.)})
  in
  Linear prod
 
@@ -215,7 +216,8 @@ let rec more_termination : bool code -> 'a st_stream -> 'a st_stream =
  *)
 let take_raw   : int code -> 'a st_stream -> 'a st_stream =
   let add_nr : 'a. int code -> 'a producer -> (int ref code * 'a) producer =
-    fun n -> function Prod ({init},Unfold {term;card;step}) ->
+    fun n -> function
+    | Prod ({init},Unfold {term;card;step}) ->
       let init = fun k ->
         init @@ fun s -> .<let nr = ref .~n in .~(k (.<nr>.,s))>.
        and prod =
@@ -225,7 +227,9 @@ let take_raw   : int code -> 'a st_stream -> 'a st_stream =
          term = (fun (nr,s) ->
                  if card = Many then .<! .~nr > 0 && .~(term s)>. else term s);
          step = (fun (nr,s) k -> step s (fun el -> k (nr,el)))}
-      in Prod ({init},prod)
+      in
+      Prod ({init},prod)
+    | _ -> assert false
   and update_nr = fun (nr,el) k -> .<(decr .~nr; .~(k el))>.
   in
   fun n -> function
@@ -306,6 +310,7 @@ let rec zip_producer: 'a producer -> 'b producer -> ('a * 'b) producer =
    The termination check may take time and is not necessarily
    idempotent.
 *)
+[@@@ocaml.warning "-8"]
 let push_linear : 'a producer -> ('b producer * ('b -> 'c st_stream)) ->
   ('a * 'c) st_stream =
   fun (Prod ({init=init1},Unfold {card=Many;term=term1;step=step1}))
@@ -322,6 +327,7 @@ let push_linear : 'a producer -> ('b producer * ('b -> 'c st_stream)) ->
         step1 s1 @@ fun a ->
           .<(.~term1r := .~(term1 s1); .~(k (a,c)))>.) @@
       more_termination .<! .~term1r>. (nestf2 b))
+[@@@ocaml.warning "+8"]
 
 
 (* Make a stream linear.
@@ -350,6 +356,7 @@ let push_linear : 'a producer -> ('b producer * ('b -> 'c st_stream)) ->
 
 let rec make_linear : 'a st_stream -> 'a producer = function
   | Linear prod -> prod
+  | Nested (Prod (_, Unfold {card=AtMost1;_}), _) -> assert false
   | Nested (Prod (init, For _) as p, nestf) ->
       make_linear (Nested (for_unfold p, nestf))
   | Nested (Prod ({init},Unfold {card=Many;term;step}),nestf) ->
@@ -379,6 +386,7 @@ let rec make_linear : 'a st_stream -> 'a producer = function
                      else .~nadv := old_adv
                    in
                    .~nadv := Some adv1; adv1 ()>.
+           | Prod (_, For _) -> assert false
            end
          | Nested (prod,nestf) ->
              make_adv nadv (fun e -> make_adv nadv k @@ nestf e) @@
@@ -406,7 +414,7 @@ let rec make_linear : 'a st_stream -> 'a producer = function
            in adv (); .~(k (.<curr>.,.<adv>.))>.
         and term (curr,_) = .<! .~curr <> None>.
         and step (curr,adv) k =
-          .<match ! .~curr with Some el -> .~adv (); .~(k .<el>.)>.
+          .<match ! .~curr with Some el -> .~adv (); .~(k .<el>.) | None -> assert false>.
   in Prod ({init},Unfold{card=Many;term;step})
 
 
